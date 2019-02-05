@@ -1,5 +1,5 @@
 {% set name = "shap" %}
-{% set version = "0.24.0" %}
+{% set version = "0.27.0" %}
 
 package:
   name: {{ name|lower }}
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/slundberg/{{ name }}/archive/{{ version }}.tar.gz
-  sha256: 3654806905f6e2d3fe2e0e9552cfc81574ae58fb8851bed33292103b4692df6f
+  sha256: 750881d747f2033075af813bd639e3e53bc01bf02ee8ebab5e17c14ecc11ba60
 
 build:
   number: 1000
