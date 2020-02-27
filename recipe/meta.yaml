@@ -1,5 +1,5 @@
 {% set name = "shap" %}
-{% set version = "0.34.0" %}
+{% set version = "0.35.0" %}
 
 package:
   name: {{ name|lower }}
@@ -7,12 +7,12 @@ package:
 
 source:
   url: https://github.com/slundberg/{{ name }}/archive/{{ version }}.tar.gz
-  sha256: 8698e8a3e76a8a3c908c6db6ac7a8adc5aadc70fadd1b7a407492fc736f82cd3
+  sha256: 66035a91660a859791fbb538a0700f27bbd8aaebad026a3175c4ec840945232d
 
 build:
   number: 0
-  skip: True  # [py27]
-  script: "{{ PYTHON }} -m pip install . --no-deps --ignore-installed --no-cache-dir -vvv"
+  skip: true  # [py27]
+  script: {{ PYTHON }} -m pip install . --no-deps --ignore-installed --no-cache-dir -vvv
 
 requirements:
   build:
@@ -36,14 +36,14 @@ requirements:
     - ipython
 test:
   imports:
-    - shap 
+    - shap
 
 about:
-  home: https://github.com/slundberg/shap 
+  home: https://github.com/slundberg/shap
   license: MIT
   license_family: MIT
   license_file: LICENSE
-  summary: 'A unified approach to explain the output of any machine learning model.'
+  summary: A unified approach to explain the output of any machine learning model.
   description: |
     SHAP (SHapley Additive exPlanations) is a unified approach to explain the output of any machine learning model. SHAP connects game theory with local explanations, uniting several previous methods and representing the only possible consistent and locally accurate additive feature attribution method based on expectations.
   doc_url: https://shap.readthedocs.io/en/latest/
@@ -51,5 +51,5 @@ about:
 
 extra:
   recipe-maintainers:
-    - mrandrewandrade 
+    - mrandrewandrade
     - slundberg
