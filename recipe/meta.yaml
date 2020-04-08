@@ -10,9 +10,9 @@ source:
   sha256: 66035a91660a859791fbb538a0700f27bbd8aaebad026a3175c4ec840945232d
 
 build:
-  number: 0
-  skip: true  # [py27]
-  script: {{ PYTHON }} -m pip install . --no-deps --ignore-installed --no-cache-dir -vvv
+  number: 1
+  skip: True  # [py27]
+  script: "{{ PYTHON }} -m pip install . --no-deps --ignore-installed --no-cache-dir -vvv"
 
 requirements:
   build:
@@ -31,7 +31,7 @@ requirements:
     - scikit-learn
     - scikit-image
     - scipy
-    - matplotlib
+    - matplotlib-base
     - tqdm
     - ipython
 test:
