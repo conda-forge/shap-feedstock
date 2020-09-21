@@ -34,6 +34,8 @@ requirements:
     - matplotlib-base
     - tqdm
     - ipython
+    - slicer
+    - numba
 test:
   imports:
     - shap
