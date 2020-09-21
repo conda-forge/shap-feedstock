@@ -1,13 +1,13 @@
 {% set name = "shap" %}
-{% set version = "0.35.0" %}
+{% set version = "0.36.0" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  url: https://github.com/slundberg/{{ name }}/archive/{{ version }}.tar.gz
-  sha256: 66035a91660a859791fbb538a0700f27bbd8aaebad026a3175c4ec840945232d
+  url: https://github.com/slundberg/{{ name }}/archive/v{{ version }}.tar.gz
+  sha256: 28909fc0eee3f16fd6a1d15ad95aee041460e4020b93c3b9accd17bdb9efef34
 
 build:
   number: 0
@@ -34,6 +34,8 @@ requirements:
     - matplotlib-base
     - tqdm
     - ipython
+    - slicer
+    - numba
 test:
   imports:
     - shap
