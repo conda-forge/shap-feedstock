@@ -5,9 +5,13 @@ Home: https://github.com/slundberg/shap
 
 Package license: MIT
 
-Feedstock license: BSD-3-Clause
+Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/shap-feedstock/blob/master/LICENSE.txt)
 
 Summary: A unified approach to explain the output of any machine learning model.
+
+Development: https://github.com/slundberg/shap
+
+Documentation: https://shap.readthedocs.io/en/latest/
 
 SHAP (SHapley Additive exPlanations) is a unified approach to explain the output of any machine learning model. SHAP connects game theory with local explanations, uniting several previous methods and representing the only possible consistent and locally accurate additive feature attribution method based on expectations.
 
