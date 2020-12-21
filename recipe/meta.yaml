@@ -20,12 +20,12 @@ requirements:
     - {{ compiler('cxx') }}
     - make  # [unix]
   host:
-    - python >=3.0
+    - python
     - pip
     - setuptools
     - numpy
   run:
-    - python >=3.0
+    - python
     - pandas
     - numpy
     - scikit-learn
