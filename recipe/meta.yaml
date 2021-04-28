@@ -34,7 +34,7 @@ requirements:
     - matplotlib-base
     - tqdm >4.25.0
     - ipython
-    - slicer ==0.0.7
+    - slicer 0.0.7
     - numba
 test:
   imports:
