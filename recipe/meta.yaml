@@ -1,5 +1,5 @@
 {% set name = "shap" %}
-{% set version = "0.38.1" %}
+{% set version = "0.39.0" %}
 
 package:
   name: {{ name|lower }}
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/slundberg/{{ name }}/archive/v{{ version }}.tar.gz
-  sha256: c280d73715b8e35b6fbd653a14aa29c79bacd35c49252b818baff0a7fcb4a66a
+  sha256: 745ff59246c517e13fb29c700c12ee78c1d833078f667676615c11cfdc244c9c
 
 build:
   number: 0
@@ -28,16 +28,15 @@ requirements:
     - numpy
   run:
     - python
-    - pandas
     - numpy
-    - scikit-learn
-    - scikit-image
     - scipy
-    - matplotlib-base
+    - scikit-learn
+    - pandas
     - tqdm >4.25.0
-    - ipython
     - slicer 0.0.7
     - numba
+    - cloudpickle
+
 test:
   requires:
     - pip
