@@ -28,6 +28,7 @@ requirements:
     - numpy
   run:
     - python
+    - packaging
     - numpy
     - scipy
     - scikit-learn
