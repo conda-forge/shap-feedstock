@@ -1,5 +1,5 @@
 {% set name = "shap" %}
-{% set version = "0.39.0" %}
+{% set version = "0.40.0" %}
 
 package:
   name: {{ name|lower }}
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/slundberg/{{ name }}/archive/v{{ version }}.tar.gz
-  sha256: 745ff59246c517e13fb29c700c12ee78c1d833078f667676615c11cfdc244c9c
+  sha256: 5a8f61707a0cb295881a4e3903b0a4ea78efa4c073521b9fd0685d48d7dbaa92
 
 build:
   number: 0
@@ -28,6 +28,7 @@ requirements:
     - numpy
   run:
     - python
+    - packaging
     - numpy
     - scipy
     - scikit-learn
