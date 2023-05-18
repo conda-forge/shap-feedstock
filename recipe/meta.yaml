@@ -19,7 +19,7 @@ requirements:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
     - make  # [unix]
-    - python                                 # [build_platform != target_platform]
+    - python >=3.6                           # [build_platform != target_platform]
     - cross-python_{{ target_platform }}     # [build_platform != target_platform]
     - numpy                                  # [build_platform != target_platform]
   host:
@@ -28,7 +28,7 @@ requirements:
     - setuptools
     - numpy
   run:
-    - python
+    - python >=3.6
     - packaging
     - numpy
     - scipy
