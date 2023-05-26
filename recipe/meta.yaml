@@ -29,7 +29,7 @@ requirements:
   run:
     - python
     - packaging
-    - numpy
+    - numpy <1.24.0  # see issue https://github.com/slundberg/shap/issues/2911
     - scipy
     - scikit-learn
     - pandas
