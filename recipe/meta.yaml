@@ -10,7 +10,7 @@ source:
   sha256: ce5117e7921f47128b529cffa0a5e7ad3f0ebcdc6d0ae57e929385bf49fb68f6
 
 build:
-  number: 2
+  number: 3
   script: {{ PYTHON }} -m pip install . --no-deps --ignore-installed --no-cache-dir -vvv
 
 requirements:
@@ -29,7 +29,7 @@ requirements:
   run:
     - python
     - packaging
-    - numpy <1.24.0  # see issue https://github.com/slundberg/shap/issues/2911
+    - numpy
     - scipy
     - scikit-learn
     - pandas
