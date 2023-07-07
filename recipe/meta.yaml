@@ -25,6 +25,7 @@ requirements:
     - python
     - pip
     - setuptools
+    - packaging
     - numpy
   run:
     - python
