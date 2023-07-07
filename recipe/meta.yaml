@@ -1,5 +1,5 @@
 {% set name = "shap" %}
-{% set version = "0.41.0" %}
+{% set version = "0.42.0" %}
 
 package:
   name: {{ name|lower }}
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/slundberg/{{ name }}/archive/v{{ version }}.tar.gz
-  sha256: ce5117e7921f47128b529cffa0a5e7ad3f0ebcdc6d0ae57e929385bf49fb68f6
+  sha256: 73a9e99dee19e1db4ba058c5bf6209ce2bd49f6e91c3c16e94480f8bbb92c97a
 
 build:
   number: 2
@@ -29,7 +29,7 @@ requirements:
   run:
     - python
     - packaging
-    - numpy <1.24.0  # see issue https://github.com/slundberg/shap/issues/2911
+    - numpy
     - scipy
     - scikit-learn
     - pandas
