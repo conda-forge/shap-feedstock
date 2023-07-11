@@ -44,7 +44,7 @@ test:
     - pip
     - pytest
     - pytest-mpl
-    - matplotlib
+    - matplotlib-base
     - ipython
   source_files:
     - tests
