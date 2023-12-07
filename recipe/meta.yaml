@@ -24,8 +24,9 @@ requirements:
   host:
     - python
     - pip
-    - setuptools
-    - packaging
+    - setuptools >=61.0
+    - setuptools-scm >=8.0
+    - packaging >=20.9
     - numpy
   run:
     - python
