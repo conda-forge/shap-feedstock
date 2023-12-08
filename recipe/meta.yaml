@@ -1,17 +1,18 @@
 {% set name = "shap" %}
-{% set version = "0.43.0" %}
+{% set version = "0.44.0" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  url: https://github.com/slundberg/{{ name }}/archive/v{{ version }}.tar.gz
-  sha256: 9084aaf5316816475470554dcd87f91a34d6f12514be33dc1bdb578eea71a6d3
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  sha256: 8f5f0401df83c8b2b566f41872f1bd8bc05bba43aab9e82bfb2047e9b2a0471c
 
 build:
   number: 0
-  script: {{ PYTHON }} -m pip install . --no-deps --ignore-installed --no-cache-dir -vvv
+  script: 
+   - {{ PYTHON }} -m pip install . --no-deps --ignore-installed --no-cache-dir -vvv
 
 requirements:
   build:
@@ -24,8 +25,9 @@ requirements:
   host:
     - python
     - pip
-    - setuptools
-    - packaging
+    - setuptools >=61.0
+    - setuptools-scm >=8.0
+    - packaging >=20.9
     - numpy
   run:
     - python
