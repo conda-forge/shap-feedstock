@@ -57,7 +57,8 @@ test:
     - tests
   commands:
     - pip check
-    - pytest tests
+    # Skip tests for CUDA as CI doesn't have a GPU.
+    - pytest -sv tests  # [cuda_compiler_version == "None"]
   imports:
     - shap
     - shap._cext
