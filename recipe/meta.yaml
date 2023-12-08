@@ -11,9 +11,11 @@ source:
 
 build:
   number: 1
-  script: {{ PYTHON }} -m pip install . --no-deps --ignore-installed --no-cache-dir -vvv
   string: cuda{{ cuda_compiler_version | replace('.', '') }}py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [cuda_compiler_version != "None"]
   string: cpu_py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [cuda_compiler_version == "None"]
+  script:
+    - export NVCC_PREPEND_FLAGS="-ccbin ${CXX}"
+    - {{ PYTHON }} -m pip install . --no-deps --ignore-installed --no-cache-dir -vvv
 
 requirements:
   build:
@@ -58,6 +60,8 @@ test:
     - pytest tests
   imports:
     - shap
+    - shap._cext
+    - shap._cext_gpu  # [cuda_compiler_version != "None"]
 
 about:
   home: https://github.com/slundberg/shap
