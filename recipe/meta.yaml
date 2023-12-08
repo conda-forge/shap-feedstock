@@ -6,14 +6,12 @@ package:
   version: {{ version }}
 
 source:
-  url: https://github.com/slundberg/{{ name }}/archive/v{{ version }}.tar.gz
-  sha256: 93db720fbf5152e359eedc8373faca91807c043dbaad55c143fc2bec4e46d807
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  sha256: 8f5f0401df83c8b2b566f41872f1bd8bc05bba43aab9e82bfb2047e9b2a0471c
 
 build:
   number: 0
   script: 
-   - export SETUPTOOLS_SCM_PRETEND_VERSION_FOR_SHAP={{ PKG_VERSION }}  # [unix]
-   - set SETUPTOOLS_SCM_PRETEND_VERSION_FOR_SHAP={{ PKG_VERSION }}  # [win]
    - {{ PYTHON }} -m pip install . --no-deps --ignore-installed --no-cache-dir -vvv
 
 requirements:
