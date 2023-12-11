@@ -62,7 +62,9 @@ test:
     - transformers  # [not (win or ppc64le)]
     - catboost  # [not ppc64le]
     - ngboost
-    - pyod >=1
+    # statsmodels on ppc64le is missing:
+    # https://github.com/conda-forge/statsmodels-feedstock/pull/63
+    - pyod >=1  # [not ppc64le]
     # Fails tests/explainers/test_tree.py::test_skopt_rf_et
     # - scikit-optimize
     # Rebuild for osx-arm64?
