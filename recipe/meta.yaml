@@ -56,9 +56,11 @@ test:
     - ipython
     - xgboost
     - tensorflow  # [osx or linux64]
-    - pytorch  # [not win]
-    - transformers
-    - catboost
+    # Not available on the platforms
+    - pytorch  # [not (win or ppc64le)]
+    # transformers tests require pytorch
+    - transformers  # [not (win or ppc64le)]
+    - catboost  # [not ppc64le]
     - ngboost
     - pyod
     # Fails tests/explainers/test_tree.py::test_skopt_rf_et
