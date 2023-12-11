@@ -17,3 +17,4 @@ provider:
   linux_ppc64le: default
   win: azure
 test_on_native_only: true
+conda_build_tool: "conda-build+conda-libmamba-solver"

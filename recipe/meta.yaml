@@ -10,7 +10,7 @@ source:
   sha256: 8f5f0401df83c8b2b566f41872f1bd8bc05bba43aab9e82bfb2047e9b2a0471c
 
 build:
-  number: 2
+  number: 3
   skip: true  # [win and cuda_compiler_version != "None"]
   string: cuda{{ cuda_compiler_version | replace('.', '') }}py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [cuda_compiler_version != "None"]
   string: cpu_py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [cuda_compiler_version == "None"]
@@ -54,6 +54,25 @@ test:
     - pytest-mpl
     - matplotlib-base
     - ipython
+    - xgboost
+    - tensorflow  # [osx or linux64]
+    # Not available on the platforms
+    - pytorch  # [not (win or ppc64le)]
+    # transformers tests require pytorch
+    - transformers  # [not (win or ppc64le)]
+    - catboost  # [not ppc64le]
+    - ngboost
+    # statsmodels on ppc64le is missing:
+    # https://github.com/conda-forge/statsmodels-feedstock/pull/63
+    - pyod >=1  # [not ppc64le]
+    # Fails tests/explainers/test_tree.py::test_skopt_rf_et
+    # - scikit-optimize
+    # Rebuild for osx-arm64?
+    # - gpboost
+    - lightgbm
+    # Due to old pins on tensorflow, this would downgrade tensorflow massively
+    # - opencv
+    - sentencepiece
   source_files:
     - tests
   commands:
