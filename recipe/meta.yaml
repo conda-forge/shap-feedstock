@@ -55,7 +55,7 @@ test:
     - matplotlib-base
     - ipython
     - xgboost
-    - tensorflow  # [not win]
+    - tensorflow  # [osx or linux64]
     - pytorch  # [not win]
     - transformers
     - catboost
