@@ -9,14 +9,16 @@ source:
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
   sha256: 8f5f0401df83c8b2b566f41872f1bd8bc05bba43aab9e82bfb2047e9b2a0471c
   patches:
-    - 0001-Build-for-all-CUDA-11-arches.patch
+    - 0001-Build-for-all-CUDA-11-arches.patch  # [cuda_compiler_version == "11.8"]
 
 build:
   number: 4
   skip: true  # [win and cuda_compiler_version != "None"]
   string: cuda{{ cuda_compiler_version | replace('.', '') }}py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [cuda_compiler_version != "None"]
   string: cpu_py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [cuda_compiler_version == "None"]
-  script: {{ PYTHON }} -m pip install . --no-deps --ignore-installed --no-cache-dir -vvv
+  script:
+    - export NVCC_PREPEND_FLAGS="-ccbin ${CXX}"
+    - {{ PYTHON }} -m pip install . --no-deps --ignore-installed --no-cache-dir -vvv
 
 requirements:
   build:
