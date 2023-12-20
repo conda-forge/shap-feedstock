@@ -39,6 +39,7 @@ requirements:
     - setuptools-scm >=8.0
     - packaging >=20.9
     - numpy
+    - cuda-cudart-dev   # [(cuda_compiler_version or "").startswith("12")]
   run:
     - python
     - packaging >20.9
