@@ -15,12 +15,12 @@ source:
     - 0002-remove-old-kepler-architecture-for-cuda-build.patch  # [(cuda_compiler_version or "").startswith("12")]
 
 build:
-  number: 6
-  skip: true  # [win and cuda_compiler_version != "None"]
+  number: 7
+  skip: true  # [cuda_compiler_version == "11.2"]
   string: cuda{{ cuda_compiler_version | replace('.', '') }}py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [cuda_compiler_version != "None"]
   string: cpu_py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [cuda_compiler_version == "None"]
   script:
-    - export NVCC_PREPEND_FLAGS="-ccbin ${CXX}"
+    - export NVCC_PREPEND_FLAGS="-ccbin ${CXX}"  # [unix]
     - {{ PYTHON }} -m pip install . --no-deps --ignore-installed --no-cache-dir -vvv
 
 requirements:
