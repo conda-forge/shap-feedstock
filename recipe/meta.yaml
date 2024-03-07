@@ -23,7 +23,7 @@ build:
     # Make the compilers look for headers in the conda include directory
     # so that nvcc finds crypt.h, which is now installed separatedly from python
     # xref: https://github.com/conda-forge/linux-sysroot-feedstock/issues/52
-    - cp $CONDA_PREFIX/include/crypt.h $PREFIX/include/python*  # [linux and py<39]
+    - export CPATH=${BUILD_PREFIX}/include  # [linux and py<39]
     - export NVCC_PREPEND_FLAGS="-ccbin ${CXX}"  # [unix]
     - {{ PYTHON }} -m pip install . --no-deps --ignore-installed --no-cache-dir -vvv
 
