@@ -21,6 +21,10 @@ build:
   string: cuda{{ cuda_compiler_version | replace('.', '') }}py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [cuda_compiler_version != "None"]
   string: cpu_py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [cuda_compiler_version == "None"]
   script:
+    # Make the compilers look for headers in the conda include directory
+    # so that nvcc finds crypt.h, which is now installed separatedly from python
+    # xref: https://github.com/conda-forge/linux-sysroot-feedstock/issues/52
+    - export CPATH=${BUILD_PREFIX}/include  # [linux and py<39]
     - export NVCC_PREPEND_FLAGS="-ccbin ${CXX}"  # [unix]
     - {{ PYTHON }} -m pip install . --no-deps --ignore-installed --no-cache-dir -vvv
 
@@ -41,6 +45,7 @@ requirements:
     - packaging >=20.9
     - numpy
     - cuda-cudart-dev   # [(cuda_compiler_version or "").startswith("12")]
+    - libxcrypt  # [linux and py<39]
   run:
     - python
     - packaging >20.9
