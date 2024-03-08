@@ -16,7 +16,8 @@ source:
 
 build:
   number: 0
-  skip: true  # [cuda_compiler_version == "11.2"]
+  # Temporarily skipping builds on some failing python 3.8 versions (see #76)
+  skip: true  # [cuda_compiler_version == "11.2" or (py<39 and linux and not aarch64 and not ppc64le and cuda_compiler_version != "None")]
   string: cuda{{ cuda_compiler_version | replace('.', '') }}py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [cuda_compiler_version != "None"]
   string: cpu_py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [cuda_compiler_version == "None"]
   script:
