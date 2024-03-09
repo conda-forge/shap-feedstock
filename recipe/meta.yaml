@@ -1,5 +1,5 @@
 {% set name = "shap" %}
-{% set version = "0.44.0" %}
+{% set version = "0.44.1" %}
 
 package:
   name: {{ name|lower }}
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 8f5f0401df83c8b2b566f41872f1bd8bc05bba43aab9e82bfb2047e9b2a0471c
+  sha256: a21d5a622e12e7c3b4a58d6e93b70133b7e09b6342b19746071a0dc2d190b432
   patches:
     - 0001-Build-for-all-CUDA-11-arches.patch  # [cuda_compiler_version == "11.8"]
     - 0001-Build-for-all-CUDA-12-arches.patch  # [(cuda_compiler_version or "").startswith("12")]
@@ -15,11 +15,16 @@ source:
     - 0002-remove-old-kepler-architecture-for-cuda-build.patch  # [(cuda_compiler_version or "").startswith("12")]
 
 build:
-  number: 7
-  skip: true  # [cuda_compiler_version == "11.2"]
+  number: 0
+  # Temporarily skipping builds on some failing python 3.8 versions (see #76)
+  skip: true  # [cuda_compiler_version == "11.2" or (py<39 and linux and not aarch64 and not ppc64le and cuda_compiler_version != "None")]
   string: cuda{{ cuda_compiler_version | replace('.', '') }}py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [cuda_compiler_version != "None"]
   string: cpu_py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [cuda_compiler_version == "None"]
   script:
+    # Make the compilers look for headers in the conda include directory
+    # so that nvcc finds crypt.h, which is now installed separatedly from python
+    # xref: https://github.com/conda-forge/linux-sysroot-feedstock/issues/52
+    - export CPATH=${BUILD_PREFIX}/include  # [linux and py<39]
     - export NVCC_PREPEND_FLAGS="-ccbin ${CXX}"  # [unix]
     - {{ PYTHON }} -m pip install . --no-deps --ignore-installed --no-cache-dir -vvv
 
@@ -40,6 +45,7 @@ requirements:
     - packaging >=20.9
     - numpy
     - cuda-cudart-dev   # [(cuda_compiler_version or "").startswith("12")]
+    - libxcrypt  # [linux and py<39]
   run:
     - python
     - packaging >20.9
