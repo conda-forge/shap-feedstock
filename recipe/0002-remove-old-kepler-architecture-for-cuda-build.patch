@@ -1,4 +1,4 @@
-From c9f0fd8de87f1a6e2eb6e2c1b703e7f89142bceb Mon Sep 17 00:00:00 2001
+From fec64fd4533d75698ece32884b8a0734d6705e80 Mon Sep 17 00:00:00 2001
 From: Tobias Pitters <tobias.pitters@gmail.com>
 Date: Thu, 5 Oct 2023 16:14:25 +0200
 Subject: [PATCH 2/2] remove old kepler architecture for cuda build
