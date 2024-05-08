@@ -1,5 +1,5 @@
 {% set name = "shap" %}
-{% set version = "0.45.0" %}
+{% set version = "0.45.1" %}
 
 package:
   name: {{ name|lower }}
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: be8ffc213ba3da1ce7950784571356e6ca77bee94446ddfa9c63eb2c72f7ce9e
+  sha256: 24e7d7e2c0d6b798701b83eacee063d64926426a150a0d261b4a135f60639f10
   patches:
     - 0001-Build-for-all-CUDA-11-arches.patch  # [cuda_compiler_version == "11.8"]
     - 0001-Build-for-all-CUDA-12-arches.patch  # [(cuda_compiler_version or "").startswith("12")]
@@ -15,7 +15,7 @@ source:
     - 0002-remove-old-kepler-architecture-for-cuda-build.patch  # [(cuda_compiler_version or "").startswith("12")]
 
 build:
-  number: 1
+  number: 0
   skip: true  # [cuda_compiler_version == "11.2" or py<39]
   string: cuda{{ cuda_compiler_version | replace('.', '') }}py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [cuda_compiler_version != "None"]
   string: cpu_py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [cuda_compiler_version == "None"]
@@ -26,6 +26,7 @@ build:
 requirements:
   build:
     - {{ compiler('c') }}
+    - {{ stdlib("c") }}
     - {{ compiler('cxx') }}
     - {{ compiler('cuda') }}  # [cuda_compiler_version != "None"]
     - make  # [unix]
@@ -48,7 +49,7 @@ requirements:
     - scikit-learn
     - pandas
     - tqdm >=4.27.0
-    - slicer ==0.0.7
+    - slicer ==0.0.8
     - numba
     - cloudpickle
     - __cuda  # [cuda_compiler_version != "None"]
