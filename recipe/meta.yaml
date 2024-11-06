@@ -67,7 +67,7 @@ test:
     # not enough static TLS for linux-aarch64 emulation
     - pytorch  # [osx or linux64]
     # transformers tests require pytorch
-    - transformers  # [not (win or ppc64le)]
+    - transformers  # [not (win or ppc64le or aarch64)]
     - catboost  # [not ppc64le]
     - ngboost
     - pyod >=1
