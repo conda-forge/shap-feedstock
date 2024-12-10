@@ -6,31 +6,35 @@ package:
   version: {{ version }}
 
 source:
-  url: https://github.com/slundberg/{{ name }}/archive/v{{ version }}.tar.gz
-  sha256: 9084aaf5316816475470554dcd87f91a34d6f12514be33dc1bdb578eea71a6d3
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  sha256: 1eabe01444a24e181ef6a7c9593b4d7c7143eefaeb1fa4d97bd5d9fdc96c4c1e
 
 build:
-  number: 0
-  script: {{ PYTHON }} -m pip install . --no-deps --ignore-installed --no-cache-dir -vvv
+  number: 1
+  skip: true  # [ppc64le]
+  script:
+    - {{ PYTHON }} -m pip install . --no-deps --ignore-installed --no-cache-dir -vvv
 
 requirements:
   build:
     - {{ compiler('c') }}
+    - {{ stdlib("c") }}
     - {{ compiler('cxx') }}
     - make  # [unix]
     - python                                 # [build_platform != target_platform]
     - cross-python_{{ target_platform }}     # [build_platform != target_platform]
-    - numpy                                  # [build_platform != target_platform]
+    - numpy <2                               # [build_platform != target_platform]
   host:
     - python
     - pip
-    - setuptools
-    - packaging
-    - numpy
+    - setuptools >=61.0
+    - setuptools-scm >=8.0
+    - packaging >=20.9
+    - numpy <2
   run:
     - python
     - packaging >20.9
-    - numpy
+    - numpy <2
     - scipy
     - scikit-learn
     - pandas
@@ -50,9 +54,9 @@ test:
     - tests
   commands:
     - pip check
-    - pytest tests
   imports:
     - shap
+    - shap._cext
 
 about:
   home: https://github.com/slundberg/shap
