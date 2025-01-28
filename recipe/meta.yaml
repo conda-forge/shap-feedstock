@@ -10,7 +10,7 @@ source:
   sha256: 1eabe01444a24e181ef6a7c9593b4d7c7143eefaeb1fa4d97bd5d9fdc96c4c1e
 
 build:
-  number: 1
+  number: 2
   skip: true  # [ppc64le]
   script:
     - {{ PYTHON }} -m pip install . --no-deps --ignore-installed --no-cache-dir -vvv
