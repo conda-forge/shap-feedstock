@@ -1,9 +1,9 @@
 azure:
   free_disk_space: true
 bot:
-  inspection: update-grayskull
   abi_migration_branches:
   - 0.43.x
+  inspection: update-grayskull
 build_platform:
   linux_aarch64: linux_64
   linux_ppc64le: linux_64
