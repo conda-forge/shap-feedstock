@@ -40,6 +40,7 @@ requirements:
     - setuptools-scm >=8.0
     - packaging >=20.9
     - numpy
+    - cython
     - cuda-cudart-dev   # [(cuda_compiler_version or "").startswith("12")]
   run:
     - typing_extensions
