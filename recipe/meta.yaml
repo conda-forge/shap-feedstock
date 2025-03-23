@@ -71,7 +71,7 @@ test:
     # transformers tests require pytorch
     - transformers  # [not (win or ppc64le or aarch64)]
     - catboost >=1.2.7  # [not (ppc64le or py>=313)]
-    - ngboost
+    - ngboost  # [not py>=313]
     - pyod >=1
     # Fails tests/explainers/test_tree.py::test_skopt_rf_et
     # - scikit-optimize
