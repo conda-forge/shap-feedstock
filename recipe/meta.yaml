@@ -86,7 +86,7 @@ test:
   commands:
     - pip check
     # Skip tests for CUDA as CI doesn't have a GPU.
-    - pytest -sv tests  # [cuda_compiler_version == "None"]
+    - pytest -k "not xslow" -sv tests  # [cuda_compiler_version == "None"]
   imports:
     - shap
     - shap._cext
