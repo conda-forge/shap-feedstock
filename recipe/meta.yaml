@@ -1,5 +1,5 @@
 {% set name = "shap" %}
-{% set version = "0.47.1" %}
+{% set version = "0.47.2" %}
 
 package:
   name: {{ name|lower }}
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 292dc548c53fb0438fddacea793eb3482936621ad50a65529630684155625dce
+  sha256: 8a53901fc44396d92a12b985d83ca4a47a7dcc4a04a7f7e556232a35f17d30c8
   patches:
     - 0001-Build-for-all-CUDA-11-arches.patch  # [cuda_compiler_version == "11.8"]
     - 0001-Build-for-all-CUDA-12-arches.patch  # [(cuda_compiler_version or "").startswith("12")]
