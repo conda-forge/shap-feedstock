@@ -15,7 +15,7 @@ source:
     - 0002-remove-old-kepler-architecture-for-cuda-build.patch  # [(cuda_compiler_version or "").startswith("12")]
 
 build:
-  number: 0
+  number: 1
   skip: true  # [cuda_compiler_version == "11.2" or py<39 or ppc64le]
   string: cuda{{ cuda_compiler_version | replace('.', '') }}py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [cuda_compiler_version != "None"]
   string: cpu_py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [cuda_compiler_version == "None"]
@@ -71,7 +71,7 @@ test:
     # transformers tests require pytorch
     - transformers  # [not (win or ppc64le or aarch64)]
     - catboost >=1.2.7  # [not ppc64le]
-    - ngboost
+    - ngboost  # [not py>=313]
     - pyod >=1
     # Fails tests/explainers/test_tree.py::test_skopt_rf_et
     # - scikit-optimize
