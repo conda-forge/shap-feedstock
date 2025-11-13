@@ -1,5 +1,5 @@
 {% set name = "shap" %}
-{% set version = "0.48.0" %}
+{% set version = "0.50.0" %}
 
 package:
   name: {{ name|lower }}
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: f169dc73fe144e70a0331b5507f9fd290d7695a3c7935fa8e4862e376321baf9
+  sha256: bdc559acf7f647bc3bb22c6a1fea9f50716ed357ad595bc357b43082ae4dc6b9
   patches:
     - 0001-Build-for-all-CUDA-11-arches.patch  # [cuda_compiler_version == "11.8"]
     - 0001-Build-for-all-CUDA-12-arches.patch  # [(cuda_compiler_version or "").startswith("12")]
@@ -15,7 +15,7 @@ source:
     - 0002-remove-old-kepler-architecture-for-cuda-build.patch  # [(cuda_compiler_version or "").startswith("12")]
 
 build:
-  number: 1
+  number: 0
   skip: true  # [cuda_compiler_version == "11.2" or py<39 or ppc64le]
   string: cuda{{ cuda_compiler_version | replace('.', '') }}py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [cuda_compiler_version != "None"]
   string: cpu_py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [cuda_compiler_version == "None"]
