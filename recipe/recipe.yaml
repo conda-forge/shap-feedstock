@@ -14,10 +14,10 @@ source:
   patches:
     - if: cuda_compiler_version == "11.8"
       then: 0001-Build-for-all-CUDA-11-arches.patch
-    - if: (cuda_compiler_version or "").startswith("12")
+    - if: (cuda_compiler_version or "") is startingwith("12")
       then: 0001-Build-for-all-CUDA-12-arches.patch
     # Taken and adapted from https://github.com/shap/shap/pull/3311
-    - if: (cuda_compiler_version or "").startswith("12")
+    - if: (cuda_compiler_version or "") is startingwith("12")
       then: 0002-remove-old-kepler-architecture-for-cuda-build.patch
 
 build:
@@ -51,7 +51,7 @@ requirements:
     - packaging >=20.9
     - numpy
     - cython
-    - if: (cuda_compiler_version or "").startswith("12")
+    - if: (cuda_compiler_version or "") is startingwith("12")
       then: cuda-cudart-dev
   run:
     - typing_extensions
