@@ -3,6 +3,7 @@ schema_version: 1
 context:
   name: shap
   version: 0.50.0
+  build: 0
 
 package:
   name: ${{ name|lower }}
@@ -21,7 +22,7 @@ source:
       then: 0002-remove-old-kepler-architecture-for-cuda-build.patch
 
 build:
-  number: 0
+  number: ${{ build if cuda_compiler_version == "None" else build + 200 }}
   string: ${{ "cpu" if cuda_compiler_version == "None" else "cuda" + (cuda_compiler_version | replace('.', '')) }}_py${{ python | version_to_buildstring }}h${{ hash }}_${{ build if cuda_compiler_version == "None" else build + 200 }}
   skip: cuda_compiler_version == "11.2" or match(python, "<3.11") or ppc64le
   script:
