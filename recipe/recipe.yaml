@@ -22,7 +22,7 @@ source:
 
 build:
   number: 0
-  string: ${{ 'cpu_py${{ CONDA_PY }}h${{ PKG_HASH }}_${{ PKG_BUILDNUM }}' if cuda_compiler_version == "None" else "cuda${{ cuda_compiler_version | replace('.', '') }}py${{ CONDA_PY }}h${{ PKG_HASH }}_${{ PKG_BUILDNUM }}" if cuda_compiler_version != "None" else '' }}
+  string: ${{ "cpu" if cuda_compiler_version == "None" else "cuda" + (cuda_compiler_version | replace('.', '')) }}_py${{ python | version_to_buildstring }}h${{ hash }}_${{ build if cuda_compiler_version == "None" else build + 200 }}
   skip: cuda_compiler_version == "11.2" or match(python, "<3.11") or ppc64le
   script:
     - if: unix
