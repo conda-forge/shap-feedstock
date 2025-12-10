@@ -100,7 +100,8 @@ tests:
         - sentencepiece
     script:
       - pip check
-      - if: cuda_compiler_version == "None"
+      # https://github.com/shap/shap/issues/4179
+      - if: cuda_compiler_version == "None" and build_platform != "osx-64"
         then: pytest -k "not xslow" -sv tests
 
 about:
