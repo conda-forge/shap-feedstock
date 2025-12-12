@@ -3,7 +3,7 @@ schema_version: 1
 context:
   name: shap
   version: 0.50.0
-  build: 0
+  build: 1
 
 package:
   name: ${{ name|lower }}
@@ -16,11 +16,10 @@ source:
     - if: cuda_compiler_version == "11.8"
       then: 0001-Build-for-all-CUDA-11-arches.patch
     - if: (cuda_compiler_version or "") is startingwith("12")
-      then: 0001-Build-for-all-CUDA-12-arches.patch
+      then:
     # Taken and adapted from https://github.com/shap/shap/pull/3311
-    - if: (cuda_compiler_version or "") is startingwith("12")
-      then: 0002-remove-old-kepler-architecture-for-cuda-build.patch
-
+        - 0001-Build-for-all-CUDA-12-arches.patch
+        - 0002-remove-old-kepler-architecture-for-cuda-build.patch
 build:
   number: ${{ build if cuda_compiler_version == "None" else build + 200 }}
   string: ${{ "cpu" if cuda_compiler_version == "None" else "cuda" + (cuda_compiler_version | replace('.', '')) }}_py${{ python | version_to_buildstring }}h${{ hash }}_${{ build if cuda_compiler_version == "None" else build + 200 }}
@@ -40,7 +39,7 @@ requirements:
     - if: unix
       then: make
     - if: build_platform != target_platform
-      then: 
+      then:
         - python
         - cross-python_${{ target_platform }}
         - numpy
