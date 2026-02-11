@@ -1,0 +1,25 @@
+From 409854c68d5ce9a06517f9954483fccf832dca30 Mon Sep 17 00:00:00 2001
+From: Felix Hoehle <fhoehle@users.noreply.github.com>
+Date: Mon, 9 Feb 2026 16:59:19 +0100
+Subject: [PATCH] update scatter plot fixture for pandas 3
+
+---
+ tests/plots/test_scatter.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tests/plots/test_scatter.py b/tests/plots/test_scatter.py
+index 63e25f0..503f0a6 100644
+--- a/tests/plots/test_scatter.py
++++ b/tests/plots/test_scatter.py
+@@ -76,7 +76,7 @@ def categorical_explanation():
+     # true non-float-castable category values
+     X.loc[X["sex"] < 0, "sex"] = 0
+     X.loc[X["sex"] > 0, "sex"] = 1
+-    X["sex"] = X["sex"].map({1: "Male", 0: "Female"}).astype("category")
++    X["sex"] = X["sex"].astype("category")
+ 
+     # train an XGBoost model (but any other model type would also work)
+     model = xgboost.XGBRegressor(random_state=0, enable_categorical=True, max_cat_to_onehot=1, base_score=0.5)
+-- 
+2.52.0
+

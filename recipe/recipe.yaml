@@ -14,12 +14,16 @@ source:
   sha256: bdc559acf7f647bc3bb22c6a1fea9f50716ed357ad595bc357b43082ae4dc6b9
   patches:
     - if: cuda_compiler_version == "11.8"
-      then: 0001-Build-for-all-CUDA-11-arches.patch
+      then: patches/0001-Build-for-all-CUDA-11-arches.patch
     - if: (cuda_compiler_version or "") is startingwith("12")
-      then:
+      then: patches/0001-Build-for-all-CUDA-12-arches.patch
     # Taken and adapted from https://github.com/shap/shap/pull/3311
-        - 0001-Build-for-all-CUDA-12-arches.patch
-        - 0002-remove-old-kepler-architecture-for-cuda-build.patch
+    - if: (cuda_compiler_version or "") is startingwith("12")
+      then: patches/0002-remove-old-kepler-architecture-for-cuda-build.patch
+    - patches/0003-replace-beta-releases-of-numba-and-llmvlite.patch
+    # Taken and adapted from https://github.com/shap/shap/pull/4253
+    - patches/0004-update-scatter-plot-fixture-for-pandas-3.patch
+
 build:
   number: ${{ build if cuda_compiler_version == "None" else build + 200 }}
   string: ${{ "cpu" if cuda_compiler_version == "None" else "cuda" + (cuda_compiler_version | replace('.', '')) }}_py${{ python | version_to_buildstring }}h${{ hash }}_${{ build if cuda_compiler_version == "None" else build + 200 }}
@@ -39,7 +43,7 @@ requirements:
     - if: unix
       then: make
     - if: build_platform != target_platform
-      then:
+      then: 
         - python
         - cross-python_${{ target_platform }}
         - numpy
@@ -88,9 +92,9 @@ tests:
         - xgboost
         - if: osx or linux64
           then: pytorch
-        - if: not (win or ppc64le or aarch64)
-          then: transformers
-        - if: not ppc64le
+        - if: not (win or ppc64le or aarch64) and not match(python, "=3.14") # excluding python 3.14 due to missing tokenizers package required by transformers <4.54.0
+          then: transformers <4.54.0 # taken from https://github.com/shap/shap/pull/4176
+        - if: not ppc64le and not (win and match(python, "=3.14"))
           then: catboost >=1.2.7
         - if: not match(python, ">=3.13")
           then: ngboost
