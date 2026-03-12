@@ -12,6 +12,8 @@ package:
 source:
   url: https://pypi.org/packages/source/${{ name[0] }}/${{ name }}/${{ name }}-${{ version }}.tar.gz
   sha256: cfa17ff213657c9d50285aa923d79b0037a62e2ee1a31bc3eec7e196b00bdb59
+  patches:
+    - patches/b12617585fcdf352db46f18f2675c8b5a90f8c64.patch
 
 build:
   number: ${{ build if cuda_compiler_version == "None" else build + 200 }}
