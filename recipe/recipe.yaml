@@ -59,7 +59,7 @@ requirements:
     - tqdm >=4.27.0
     - slicer ==0.0.8
     - numba >=0.54
-    - if: osx-64
+    - if: osx and x86_64
       then:
         - llvmlite <0.46
         - numba <0.63
