@@ -12,17 +12,6 @@ package:
 source:
   url: https://pypi.org/packages/source/${{ name[0] }}/${{ name }}/${{ name }}-${{ version }}.tar.gz
   sha256: cfa17ff213657c9d50285aa923d79b0037a62e2ee1a31bc3eec7e196b00bdb59
-  patches:
-    - if: cuda_compiler_version == "11.8"
-      then: patches/0001-Build-for-all-CUDA-11-arches.patch
-    - if: (cuda_compiler_version or "") is startingwith("12")
-      then:
-    # Taken and adapted from https://github.com/shap/shap/pull/3311
-        - patches/0001-Build-for-all-CUDA-12-arches.patch
-        - patches/0002-remove-old-kepler-architecture-for-cuda-build.patch
-    - patches/0003-replace-beta-releases-of-numba-and-llmvlite.patch
-    # Taken and adapted from https://github.com/shap/shap/pull/4253
-    - patches/0004-update-scatter-plot-fixture-for-pandas-3.patch
 
 build:
   number: ${{ build if cuda_compiler_version == "None" else build + 200 }}
