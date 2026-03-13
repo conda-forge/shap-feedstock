@@ -1,0 +1,35 @@
+From b12617585fcdf352db46f18f2675c8b5a90f8c64 Mon Sep 17 00:00:00 2001
+From: Tobias Pitters <31857876+CloseChoice@users.noreply.github.com>
+Date: Sat, 7 Mar 2026 20:57:15 +0100
+Subject: [PATCH] Fix NumPy deprecation warning in coalition explainer (#4291)
+
+Replace float() calls with .item() to avoid "Conversion of an array
+with ndim > 0 to a scalar is deprecated" warnings in both single-output
+and multi-output code paths.
+
+Fixes #4290
+
+https://claude.ai/code/session_01BvKZKAFmLXrRozVsAq9Gef
+
+Co-authored-by: Claude <noreply@anthropic.com>
+---
+ shap/explainers/_coalition.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/shap/explainers/_coalition.py b/shap/explainers/_coalition.py
+index 7f0ff887a..171e44719 100644
+--- a/shap/explainers/_coalition.py
++++ b/shap/explainers/_coalition.py
+@@ -289,10 +289,10 @@ def explain_row(
+                     off_result = np.asarray(off_result).reshape(-1)
+                     on_result = np.asarray(on_result).reshape(-1)
+                     for i in range(num_outputs):
+-                        marginal_contribution = float((on_result[i] - off_result[i]) * weight)
++                        marginal_contribution = ((on_result[i] - off_result[i]) * weight).item()
+                         shap_values[feature_name_to_index[last_key], i] += marginal_contribution
+                 else:
+-                    marginal_contribution = float((on_result - off_result) * weight)
++                    marginal_contribution = ((on_result - off_result) * weight).item()
+                     shap_values[feature_name_to_index[last_key]] += marginal_contribution
+ 
+         # Step 5: Return results

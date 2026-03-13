@@ -2,8 +2,8 @@ schema_version: 1
 
 context:
   name: shap
-  version: 0.50.0
-  build: 1
+  version: "0.51.0"
+  build: 0
 
 package:
   name: ${{ name|lower }}
@@ -11,23 +11,16 @@ package:
 
 source:
   url: https://pypi.org/packages/source/${{ name[0] }}/${{ name }}/${{ name }}-${{ version }}.tar.gz
-  sha256: bdc559acf7f647bc3bb22c6a1fea9f50716ed357ad595bc357b43082ae4dc6b9
+  sha256: cfa17ff213657c9d50285aa923d79b0037a62e2ee1a31bc3eec7e196b00bdb59
   patches:
-    - if: cuda_compiler_version == "11.8"
-      then: patches/0001-Build-for-all-CUDA-11-arches.patch
-    - if: (cuda_compiler_version or "") is startingwith("12")
-      then: patches/0001-Build-for-all-CUDA-12-arches.patch
-    # Taken and adapted from https://github.com/shap/shap/pull/3311
-    - if: (cuda_compiler_version or "") is startingwith("12")
-      then: patches/0002-remove-old-kepler-architecture-for-cuda-build.patch
-    - patches/0003-replace-beta-releases-of-numba-and-llmvlite.patch
-    # Taken and adapted from https://github.com/shap/shap/pull/4253
-    - patches/0004-update-scatter-plot-fixture-for-pandas-3.patch
+    - patches/b12617585fcdf352db46f18f2675c8b5a90f8c64.patch
 
 build:
   number: ${{ build if cuda_compiler_version == "None" else build + 200 }}
   string: ${{ "cpu" if cuda_compiler_version == "None" else "cuda" + (cuda_compiler_version | replace('.', '')) }}_py${{ python | version_to_buildstring }}h${{ hash }}_${{ build if cuda_compiler_version == "None" else build + 200 }}
-  skip: cuda_compiler_version == "11.2" or match(python, "<3.11") or ppc64le
+  skip:
+    - cuda_compiler_version == "11.2" or match(python, "<3.11") or ppc64le
+    - osx and x86_64 and match(python, ">=3.14")
   script:
     - if: unix
       then: export NVCC_PREPEND_FLAGS="-ccbin ${CXX}"
@@ -43,7 +36,7 @@ requirements:
     - if: unix
       then: make
     - if: build_platform != target_platform
-      then: 
+      then:
         - python
         - cross-python_${{ target_platform }}
         - numpy
@@ -68,6 +61,10 @@ requirements:
     - tqdm >=4.27.0
     - slicer ==0.0.8
     - numba >=0.54
+    - if: osx and x86_64
+      then:
+        - llvmlite <0.46
+        - numba <0.63
     - cloudpickle
     - if: cuda_compiler_version != "None"
       then: __cuda
