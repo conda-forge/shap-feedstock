@@ -13,18 +13,25 @@ source:
   url: https://pypi.org/packages/source/${{ name[0] }}/${{ name }}/${{ name }}-${{ version }}.tar.gz
   sha256: cfa17ff213657c9d50285aa923d79b0037a62e2ee1a31bc3eec7e196b00bdb59
   patches:
-    - patches/b12617585fcdf352db46f18f2675c8b5a90f8c64.patch
+    - if: match(version, "<0.51.1")
+      then: patches/b12617585fcdf352db46f18f2675c8b5a90f8c64.patch
 
 build:
   number: ${{ build if cuda_compiler_version == "None" else build + 200 }}
   string: ${{ "cpu" if cuda_compiler_version == "None" else "cuda" + (cuda_compiler_version | replace('.', '')) }}_py${{ python | version_to_buildstring }}h${{ hash }}_${{ build if cuda_compiler_version == "None" else build + 200 }}
   skip:
-    - cuda_compiler_version == "11.2" or match(python, "<3.11") or ppc64le
+    - cuda_compiler_version == "11.2" or ppc64le
+    - match(version, "<0.51.1") and match(python, "<3.11")
+    - match(version, ">=0.51.1") and match(python, "<3.12")
     - osx and x86_64 and match(python, ">=3.14")
   script:
+    - if: cuda_compiler_version != "None" and unix
+      then: export SHAP_ENABLE_CUDA=1
+    - if: cuda_compiler_version != "None" and win
+      then: set SHAP_ENABLE_CUDA=1
     - if: unix
       then: export NVCC_PREPEND_FLAGS="-ccbin ${CXX}"
-    - ${{ PYTHON }} -m pip install . --no-deps --ignore-installed --no-cache-dir -vvv
+    - ${{ PYTHON }} -m pip install . --no-deps --ignore-installed --no-cache-dir --no-build-isolation -vvv
 
 requirements:
   build:
@@ -33,6 +40,10 @@ requirements:
     - ${{ compiler('cxx') }}
     - if: cuda_compiler_version != "None"
       then: ${{ compiler('cuda') }}
+    - if: match(version, ">=0.51.1")
+      then:
+        - cmake
+        - ninja
     - if: unix
       then: make
     - if: build_platform != target_platform
@@ -43,11 +54,17 @@ requirements:
   host:
     - python
     - pip
-    - setuptools >=61.0
     - setuptools-scm >=8.0
-    - packaging >=20.9
+    - packaging >20.9
     - numpy
-    - cython
+    - if: match(version, "<0.51.1")
+      then:
+        - setuptools >=61.0
+        - cython
+    - if: match(version, ">=0.51.1")
+      then:
+        - scikit-build-core >=0.10.0
+        - nanobind >=2.0.0
     - if: (cuda_compiler_version or "") is startingwith("12")
       then: cuda-cudart-dev
   run:
@@ -74,6 +91,8 @@ tests:
       imports:
         - shap
         - shap._cext
+        - if: match(version, ">=0.51.1")
+          then: shap._cutils
         - if: cuda_compiler_version != "None"
           then: shap._cext_gpu
   - files:
