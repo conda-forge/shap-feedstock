@@ -2,7 +2,7 @@ schema_version: 1
 
 context:
   name: shap
-  version: "0.51.0"
+  version: "0.52.0"
   build: 0
 
 package:
@@ -11,7 +11,7 @@ package:
 
 source:
   url: https://pypi.org/packages/source/${{ name[0] }}/${{ name }}/${{ name }}-${{ version }}.tar.gz
-  sha256: cfa17ff213657c9d50285aa923d79b0037a62e2ee1a31bc3eec7e196b00bdb59
+  sha256: 81d4ae478f67f8122de1bb411dc4e3ddff0604cbc27dc9cb8ea66d5c73462fd2
   patches:
     - patches/b12617585fcdf352db46f18f2675c8b5a90f8c64.patch
 
