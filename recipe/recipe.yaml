@@ -12,8 +12,6 @@ package:
 source:
   url: https://pypi.org/packages/source/${{ name[0] }}/${{ name }}/${{ name }}-${{ version }}.tar.gz
   sha256: 81d4ae478f67f8122de1bb411dc4e3ddff0604cbc27dc9cb8ea66d5c73462fd2
-  patches:
-    - patches/b12617585fcdf352db46f18f2675c8b5a90f8c64.patch
 
 build:
   number: ${{ build if cuda_compiler_version == "None" else build + 200 }}
@@ -31,6 +29,8 @@ requirements:
     - ${{ compiler('c') }}
     - ${{ stdlib("c") }}
     - ${{ compiler('cxx') }}
+    - cmake
+    - ninja
     - if: cuda_compiler_version != "None"
       then: ${{ compiler('cuda') }}
     - if: unix
@@ -43,11 +43,12 @@ requirements:
   host:
     - python
     - pip
-    - setuptools >=61.0
+    - setuptools
+    - scikit-build-core >=0.10.0
     - setuptools-scm >=8.0
-    - packaging >=20.9
     - numpy
-    - cython
+    - packaging >20.9
+    - nanobind >=2.0.0
     - if: (cuda_compiler_version or "") is startingwith("12")
       then: cuda-cudart-dev
   run:
