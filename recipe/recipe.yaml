@@ -19,7 +19,6 @@ build:
   skip:
     - cuda_compiler_version == "11.2" or match(python, "<3.12") or ppc64le
     - osx and x86_64 and match(python, ">=3.14")
-    - not win
   script:
     - if: unix
       then: export NVCC_PREPEND_FLAGS="-ccbin ${CXX}"
