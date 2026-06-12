@@ -19,6 +19,7 @@ build:
   skip:
     - cuda_compiler_version == "11.2" or match(python, "<3.12") or ppc64le
     - osx and x86_64 and match(python, ">=3.14")
+    - not win
   script:
     - if: unix
       then: export NVCC_PREPEND_FLAGS="-ccbin ${CXX}"
@@ -26,11 +27,10 @@ build:
       then: export SHAP_ENABLE_CUDA=1
     - if: cuda_compiler_version != "None" and win
       then: set SHAP_ENABLE_CUDA=1
-    # On Windows, CMake's Visual Studio generator requires the CUDA toolset
-    # integrated into Visual Studio. Conda-forge CUDA packages install nvcc.exe
-    # standalone without VS integration, so we use Ninja instead.
-    - if: cuda_compiler_version != "None" and win
-      then: set CMAKE_GENERATOR=Ninja
+    - if: win
+      then:
+        - set CMAKE_GENERATOR=Ninja
+        - set CMAKE_PLAT
     - ${{ PYTHON }} -m pip install . --no-deps --ignore-installed --no-cache-dir -vvv
 
 requirements:
