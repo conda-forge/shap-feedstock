@@ -5,15 +5,15 @@
 
 [workspace]
 name = "shap-feedstock"
-version = "3.56.2"  # conda-smithy version used to generate this file
+version = "2026.5.29"  # conda-smithy version used to generate this file
 description = "Pixi configuration for conda-forge/shap-feedstock"
 authors = ["@conda-forge/shap"]
 channels = ["conda-forge"]
-platforms = ["linux-64", "linux-aarch64", "linux-ppc64le", "osx-64", "win-64"]
+platforms = ["linux-64", "linux-aarch64", "osx-64", "osx-arm64", "win-64"]
 requires-pixi = ">=0.59.0"
 
 [dependencies]
-conda-build = ">=24.1"
+conda-build = ">=26.3"
 conda-forge-ci-setup = "4.*"
 rattler-build = "*"
 
@@ -23,12 +23,6 @@ description = "List contents of all packages found in rattler-build build direct
 [tasks.build]
 cmd = "rattler-build build --recipe recipe"
 description = "Build shap-feedstock directly (without setup scripts), no particular variant specified"
-[tasks."build-linux_64_cuda_compiler_version12.9python3.11.____cpython"]
-cmd = "rattler-build build --recipe recipe -m .ci_support/linux_64_cuda_compiler_version12.9python3.11.____cpython.yaml"
-description = "Build shap-feedstock with variant linux_64_cuda_compiler_version12.9python3.11.____cpython directly (without setup scripts)"
-[tasks."inspect-linux_64_cuda_compiler_version12.9python3.11.____cpython"]
-cmd = "inspect_artifacts --recipe-dir recipe -m .ci_support/linux_64_cuda_compiler_version12.9python3.11.____cpython.yaml"
-description = "List contents of shap-feedstock packages built for variant linux_64_cuda_compiler_version12.9python3.11.____cpython"
 [tasks."build-linux_64_cuda_compiler_version12.9python3.12.____cpython"]
 cmd = "rattler-build build --recipe recipe -m .ci_support/linux_64_cuda_compiler_version12.9python3.12.____cpython.yaml"
 description = "Build shap-feedstock with variant linux_64_cuda_compiler_version12.9python3.12.____cpython directly (without setup scripts)"
@@ -47,12 +41,6 @@ description = "Build shap-feedstock with variant linux_64_cuda_compiler_version1
 [tasks."inspect-linux_64_cuda_compiler_version12.9python3.14.____cp314"]
 cmd = "inspect_artifacts --recipe-dir recipe -m .ci_support/linux_64_cuda_compiler_version12.9python3.14.____cp314.yaml"
 description = "List contents of shap-feedstock packages built for variant linux_64_cuda_compiler_version12.9python3.14.____cp314"
-[tasks."build-linux_64_cuda_compiler_versionNonepython3.11.____cpython"]
-cmd = "rattler-build build --recipe recipe -m .ci_support/linux_64_cuda_compiler_versionNonepython3.11.____cpython.yaml"
-description = "Build shap-feedstock with variant linux_64_cuda_compiler_versionNonepython3.11.____cpython directly (without setup scripts)"
-[tasks."inspect-linux_64_cuda_compiler_versionNonepython3.11.____cpython"]
-cmd = "inspect_artifacts --recipe-dir recipe -m .ci_support/linux_64_cuda_compiler_versionNonepython3.11.____cpython.yaml"
-description = "List contents of shap-feedstock packages built for variant linux_64_cuda_compiler_versionNonepython3.11.____cpython"
 [tasks."build-linux_64_cuda_compiler_versionNonepython3.12.____cpython"]
 cmd = "rattler-build build --recipe recipe -m .ci_support/linux_64_cuda_compiler_versionNonepython3.12.____cpython.yaml"
 description = "Build shap-feedstock with variant linux_64_cuda_compiler_versionNonepython3.12.____cpython directly (without setup scripts)"
@@ -71,12 +59,6 @@ description = "Build shap-feedstock with variant linux_64_cuda_compiler_versionN
 [tasks."inspect-linux_64_cuda_compiler_versionNonepython3.14.____cp314"]
 cmd = "inspect_artifacts --recipe-dir recipe -m .ci_support/linux_64_cuda_compiler_versionNonepython3.14.____cp314.yaml"
 description = "List contents of shap-feedstock packages built for variant linux_64_cuda_compiler_versionNonepython3.14.____cp314"
-[tasks."build-linux_aarch64_cuda_compiler_version12.9python3.11.____cpython"]
-cmd = "rattler-build build --recipe recipe -m .ci_support/linux_aarch64_cuda_compiler_version12.9python3.11.____cpython.yaml"
-description = "Build shap-feedstock with variant linux_aarch64_cuda_compiler_version12.9python3.11.____cpython directly (without setup scripts)"
-[tasks."inspect-linux_aarch64_cuda_compiler_version12.9python3.11.____cpython"]
-cmd = "inspect_artifacts --recipe-dir recipe -m .ci_support/linux_aarch64_cuda_compiler_version12.9python3.11.____cpython.yaml"
-description = "List contents of shap-feedstock packages built for variant linux_aarch64_cuda_compiler_version12.9python3.11.____cpython"
 [tasks."build-linux_aarch64_cuda_compiler_version12.9python3.12.____cpython"]
 cmd = "rattler-build build --recipe recipe -m .ci_support/linux_aarch64_cuda_compiler_version12.9python3.12.____cpython.yaml"
 description = "Build shap-feedstock with variant linux_aarch64_cuda_compiler_version12.9python3.12.____cpython directly (without setup scripts)"
@@ -95,12 +77,6 @@ description = "Build shap-feedstock with variant linux_aarch64_cuda_compiler_ver
 [tasks."inspect-linux_aarch64_cuda_compiler_version12.9python3.14.____cp314"]
 cmd = "inspect_artifacts --recipe-dir recipe -m .ci_support/linux_aarch64_cuda_compiler_version12.9python3.14.____cp314.yaml"
 description = "List contents of shap-feedstock packages built for variant linux_aarch64_cuda_compiler_version12.9python3.14.____cp314"
-[tasks."build-linux_aarch64_cuda_compiler_versionNonepython3.11.____cpython"]
-cmd = "rattler-build build --recipe recipe -m .ci_support/linux_aarch64_cuda_compiler_versionNonepython3.11.____cpython.yaml"
-description = "Build shap-feedstock with variant linux_aarch64_cuda_compiler_versionNonepython3.11.____cpython directly (without setup scripts)"
-[tasks."inspect-linux_aarch64_cuda_compiler_versionNonepython3.11.____cpython"]
-cmd = "inspect_artifacts --recipe-dir recipe -m .ci_support/linux_aarch64_cuda_compiler_versionNonepython3.11.____cpython.yaml"
-description = "List contents of shap-feedstock packages built for variant linux_aarch64_cuda_compiler_versionNonepython3.11.____cpython"
 [tasks."build-linux_aarch64_cuda_compiler_versionNonepython3.12.____cpython"]
 cmd = "rattler-build build --recipe recipe -m .ci_support/linux_aarch64_cuda_compiler_versionNonepython3.12.____cpython.yaml"
 description = "Build shap-feedstock with variant linux_aarch64_cuda_compiler_versionNonepython3.12.____cpython directly (without setup scripts)"
@@ -119,12 +95,6 @@ description = "Build shap-feedstock with variant linux_aarch64_cuda_compiler_ver
 [tasks."inspect-linux_aarch64_cuda_compiler_versionNonepython3.14.____cp314"]
 cmd = "inspect_artifacts --recipe-dir recipe -m .ci_support/linux_aarch64_cuda_compiler_versionNonepython3.14.____cp314.yaml"
 description = "List contents of shap-feedstock packages built for variant linux_aarch64_cuda_compiler_versionNonepython3.14.____cp314"
-[tasks."build-osx_64_python3.11.____cpython"]
-cmd = "rattler-build build --recipe recipe -m .ci_support/osx_64_python3.11.____cpython.yaml"
-description = "Build shap-feedstock with variant osx_64_python3.11.____cpython directly (without setup scripts)"
-[tasks."inspect-osx_64_python3.11.____cpython"]
-cmd = "inspect_artifacts --recipe-dir recipe -m .ci_support/osx_64_python3.11.____cpython.yaml"
-description = "List contents of shap-feedstock packages built for variant osx_64_python3.11.____cpython"
 [tasks."build-osx_64_python3.12.____cpython"]
 cmd = "rattler-build build --recipe recipe -m .ci_support/osx_64_python3.12.____cpython.yaml"
 description = "Build shap-feedstock with variant osx_64_python3.12.____cpython directly (without setup scripts)"
@@ -137,12 +107,6 @@ description = "Build shap-feedstock with variant osx_64_python3.13.____cp313 dir
 [tasks."inspect-osx_64_python3.13.____cp313"]
 cmd = "inspect_artifacts --recipe-dir recipe -m .ci_support/osx_64_python3.13.____cp313.yaml"
 description = "List contents of shap-feedstock packages built for variant osx_64_python3.13.____cp313"
-[tasks."build-osx_arm64_python3.11.____cpython"]
-cmd = "rattler-build build --recipe recipe -m .ci_support/osx_arm64_python3.11.____cpython.yaml"
-description = "Build shap-feedstock with variant osx_arm64_python3.11.____cpython directly (without setup scripts)"
-[tasks."inspect-osx_arm64_python3.11.____cpython"]
-cmd = "inspect_artifacts --recipe-dir recipe -m .ci_support/osx_arm64_python3.11.____cpython.yaml"
-description = "List contents of shap-feedstock packages built for variant osx_arm64_python3.11.____cpython"
 [tasks."build-osx_arm64_python3.12.____cpython"]
 cmd = "rattler-build build --recipe recipe -m .ci_support/osx_arm64_python3.12.____cpython.yaml"
 description = "Build shap-feedstock with variant osx_arm64_python3.12.____cpython directly (without setup scripts)"
@@ -161,12 +125,6 @@ description = "Build shap-feedstock with variant osx_arm64_python3.14.____cp314 
 [tasks."inspect-osx_arm64_python3.14.____cp314"]
 cmd = "inspect_artifacts --recipe-dir recipe -m .ci_support/osx_arm64_python3.14.____cp314.yaml"
 description = "List contents of shap-feedstock packages built for variant osx_arm64_python3.14.____cp314"
-[tasks."build-win_64_cuda_compiler_version12.9python3.11.____cpython"]
-cmd = "rattler-build build --recipe recipe -m .ci_support/win_64_cuda_compiler_version12.9python3.11.____cpython.yaml"
-description = "Build shap-feedstock with variant win_64_cuda_compiler_version12.9python3.11.____cpython directly (without setup scripts)"
-[tasks."inspect-win_64_cuda_compiler_version12.9python3.11.____cpython"]
-cmd = "inspect_artifacts --recipe-dir recipe -m .ci_support/win_64_cuda_compiler_version12.9python3.11.____cpython.yaml"
-description = "List contents of shap-feedstock packages built for variant win_64_cuda_compiler_version12.9python3.11.____cpython"
 [tasks."build-win_64_cuda_compiler_version12.9python3.12.____cpython"]
 cmd = "rattler-build build --recipe recipe -m .ci_support/win_64_cuda_compiler_version12.9python3.12.____cpython.yaml"
 description = "Build shap-feedstock with variant win_64_cuda_compiler_version12.9python3.12.____cpython directly (without setup scripts)"
@@ -185,12 +143,6 @@ description = "Build shap-feedstock with variant win_64_cuda_compiler_version12.
 [tasks."inspect-win_64_cuda_compiler_version12.9python3.14.____cp314"]
 cmd = "inspect_artifacts --recipe-dir recipe -m .ci_support/win_64_cuda_compiler_version12.9python3.14.____cp314.yaml"
 description = "List contents of shap-feedstock packages built for variant win_64_cuda_compiler_version12.9python3.14.____cp314"
-[tasks."build-win_64_cuda_compiler_versionNonepython3.11.____cpython"]
-cmd = "rattler-build build --recipe recipe -m .ci_support/win_64_cuda_compiler_versionNonepython3.11.____cpython.yaml"
-description = "Build shap-feedstock with variant win_64_cuda_compiler_versionNonepython3.11.____cpython directly (without setup scripts)"
-[tasks."inspect-win_64_cuda_compiler_versionNonepython3.11.____cpython"]
-cmd = "inspect_artifacts --recipe-dir recipe -m .ci_support/win_64_cuda_compiler_versionNonepython3.11.____cpython.yaml"
-description = "List contents of shap-feedstock packages built for variant win_64_cuda_compiler_versionNonepython3.11.____cpython"
 [tasks."build-win_64_cuda_compiler_versionNonepython3.12.____cpython"]
 cmd = "rattler-build build --recipe recipe -m .ci_support/win_64_cuda_compiler_versionNonepython3.12.____cpython.yaml"
 description = "Build shap-feedstock with variant win_64_cuda_compiler_versionNonepython3.12.____cpython directly (without setup scripts)"

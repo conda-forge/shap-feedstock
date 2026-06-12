@@ -2,7 +2,7 @@ schema_version: 1
 
 context:
   name: shap
-  version: "0.51.0"
+  version: "0.52.0"
   build: 0
 
 package:
@@ -11,19 +11,26 @@ package:
 
 source:
   url: https://pypi.org/packages/source/${{ name[0] }}/${{ name }}/${{ name }}-${{ version }}.tar.gz
-  sha256: cfa17ff213657c9d50285aa923d79b0037a62e2ee1a31bc3eec7e196b00bdb59
-  patches:
-    - patches/b12617585fcdf352db46f18f2675c8b5a90f8c64.patch
+  sha256: 81d4ae478f67f8122de1bb411dc4e3ddff0604cbc27dc9cb8ea66d5c73462fd2
 
 build:
   number: ${{ build if cuda_compiler_version == "None" else build + 200 }}
   string: ${{ "cpu" if cuda_compiler_version == "None" else "cuda" + (cuda_compiler_version | replace('.', '')) }}_py${{ python | version_to_buildstring }}h${{ hash }}_${{ build if cuda_compiler_version == "None" else build + 200 }}
   skip:
-    - cuda_compiler_version == "11.2" or match(python, "<3.11") or ppc64le
+    - cuda_compiler_version == "11.2" or match(python, "<3.12") or ppc64le
     - osx and x86_64 and match(python, ">=3.14")
   script:
     - if: unix
       then: export NVCC_PREPEND_FLAGS="-ccbin ${CXX}"
+    - if: cuda_compiler_version != "None" and unix
+      then: export SHAP_ENABLE_CUDA=1
+    - if: cuda_compiler_version != "None" and win
+      then: set SHAP_ENABLE_CUDA=1
+    - if: win
+      then:
+        - set CMAKE_GENERATOR=Ninja
+        - set CMAKE_GENERATOR_PLATFORM=
+        - set CMAKE_GENERATOR_TOOLSET=
     - ${{ PYTHON }} -m pip install . --no-deps --ignore-installed --no-cache-dir -vvv
 
 requirements:
@@ -31,6 +38,8 @@ requirements:
     - ${{ compiler('c') }}
     - ${{ stdlib("c") }}
     - ${{ compiler('cxx') }}
+    - cmake
+    - ninja
     - if: cuda_compiler_version != "None"
       then: ${{ compiler('cuda') }}
     - if: unix
@@ -43,11 +52,12 @@ requirements:
   host:
     - python
     - pip
-    - setuptools >=61.0
+    - setuptools
+    - scikit-build-core >=0.10.0
     - setuptools-scm >=8.0
-    - packaging >=20.9
     - numpy
-    - cython
+    - packaging >20.9
+    - nanobind >=2.0.0
     - if: (cuda_compiler_version or "") is startingwith("12")
       then: cuda-cudart-dev
   run:
