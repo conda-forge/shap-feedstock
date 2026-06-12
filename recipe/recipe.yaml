@@ -22,6 +22,10 @@ build:
   script:
     - if: unix
       then: export NVCC_PREPEND_FLAGS="-ccbin ${CXX}"
+    - if: cuda_compiler_version != "None" and unix
+      then: export SHAP_ENABLE_CUDA=1
+    - if: cuda_compiler_version != "None" and win
+      then: set SHAP_ENABLE_CUDA=1
     - ${{ PYTHON }} -m pip install . --no-deps --ignore-installed --no-cache-dir -vvv
 
 requirements:
