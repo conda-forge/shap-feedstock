@@ -30,7 +30,8 @@ build:
     - if: win
       then:
         - set CMAKE_GENERATOR=Ninja
-        - set CMAKE_PLAT
+        - set CMAKE_GENERATOR_PLATFORM=
+        - set CMAKE_GENERATOR_TOOLSET=
     - ${{ PYTHON }} -m pip install . --no-deps --ignore-installed --no-cache-dir -vvv
 
 requirements:
