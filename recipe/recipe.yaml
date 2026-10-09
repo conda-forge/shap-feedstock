@@ -2,7 +2,7 @@ schema_version: 1
 
 context:
   name: shap
-  version: "0.52.0"
+  version: 0.53.0
   build: 0
 
 package:
@@ -11,7 +11,7 @@ package:
 
 source:
   url: https://pypi.org/packages/source/${{ name[0] }}/${{ name }}/${{ name }}-${{ version }}.tar.gz
-  sha256: 81d4ae478f67f8122de1bb411dc4e3ddff0604cbc27dc9cb8ea66d5c73462fd2
+  sha256: adebe5538f0815a0923e074174ad87a7039a61638146f1375113643a34197840
 
 build:
   number: ${{ build if cuda_compiler_version == "None" else build + 200 }}
@@ -21,13 +21,14 @@ build:
     - osx and x86_64 and match(python, ">=3.14")
   script:
     - if: unix
-      then: export NVCC_PREPEND_FLAGS="-ccbin ${CXX}"
-    - if: cuda_compiler_version != "None" and unix
-      then: export SHAP_ENABLE_CUDA=1
-    - if: cuda_compiler_version != "None" and win
-      then: set SHAP_ENABLE_CUDA=1
+      then:
+        - export NVCC_PREPEND_FLAGS="-ccbin ${CXX}"
+        - if: cuda_compiler_version != "None"
+          then: export SHAP_ENABLE_CUDA=1
     - if: win
       then:
+        - if: cuda_compiler_version != "None"
+          then: set SHAP_ENABLE_CUDA=1
         - set CMAKE_GENERATOR=Ninja
         - set CMAKE_GENERATOR_PLATFORM=
         - set CMAKE_GENERATOR_TOOLSET=
@@ -61,7 +62,6 @@ requirements:
     - if: (cuda_compiler_version or "") is startingwith("12")
       then: cuda-cudart-dev
   run:
-    - typing_extensions
     - python
     - packaging >20.9
     - numpy >=2
@@ -70,7 +70,6 @@ requirements:
     - pandas
     - tqdm >=4.27.0
     - slicer ==0.0.8
-    - numba >=0.54
     - if: osx and x86_64
       then:
         - llvmlite <0.46
