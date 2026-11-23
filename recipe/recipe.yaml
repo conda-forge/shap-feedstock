@@ -2,116 +2,198 @@ schema_version: 1
 
 context:
   name: shap
-  version: "0.52.0"
+  version: 0.54.1
   build: 0
 
-package:
-  name: ${{ name|lower }}
+recipe:
+  name: shap-split
   version: ${{ version }}
 
 source:
   url: https://pypi.org/packages/source/${{ name[0] }}/${{ name }}/${{ name }}-${{ version }}.tar.gz
-  sha256: 81d4ae478f67f8122de1bb411dc4e3ddff0604cbc27dc9cb8ea66d5c73462fd2
+  sha256: 1de58fde32686a2757bada96a7cb0a77649aa519800e5ab059faaab3900c6720
+  patches:
+    # CUDA 13 dropped sm_60/sm_70 and its CCCL requires C++17 and no longer
+    # includes thrust/pair.h transitively. Architectures come from CMAKE_ARGS.
+    - shap-cuda-cuda13.patch
 
 build:
-  number: ${{ build if cuda_compiler_version == "None" else build + 200 }}
-  string: ${{ "cpu" if cuda_compiler_version == "None" else "cuda" + (cuda_compiler_version | replace('.', '')) }}_py${{ python | version_to_buildstring }}h${{ hash }}_${{ build if cuda_compiler_version == "None" else build + 200 }}
+  number: ${{ build }}
   skip:
-    - cuda_compiler_version == "11.2" or match(python, "<3.12") or ppc64le
+    - match(python, "<3.12") or ppc64le
     - osx and x86_64 and match(python, ">=3.14")
-  script:
-    - if: unix
-      then: export NVCC_PREPEND_FLAGS="-ccbin ${CXX}"
-    - if: cuda_compiler_version != "None" and unix
-      then: export SHAP_ENABLE_CUDA=1
-    - if: cuda_compiler_version != "None" and win
-      then: set SHAP_ENABLE_CUDA=1
-    - if: win
-      then:
-        - set CMAKE_GENERATOR=Ninja
-        - set CMAKE_GENERATOR_PLATFORM=
-        - set CMAKE_GENERATOR_TOOLSET=
-    - ${{ PYTHON }} -m pip install . --no-deps --ignore-installed --no-cache-dir -vvv
 
-requirements:
-  build:
-    - ${{ compiler('c') }}
-    - ${{ stdlib("c") }}
-    - ${{ compiler('cxx') }}
-    - cmake
-    - ninja
-    - if: cuda_compiler_version != "None"
-      then: ${{ compiler('cuda') }}
-    - if: unix
-      then: make
-    - if: build_platform != target_platform
-      then:
-        - python
-        - cross-python_${{ target_platform }}
-        - numpy
-  host:
-    - python
-    - pip
-    - setuptools
-    - scikit-build-core >=0.10.0
-    - setuptools-scm >=8.0
-    - numpy
-    - packaging >20.9
-    - nanobind >=2.0.0
-    - if: (cuda_compiler_version or "") is startingwith("12")
-      then: cuda-cudart-dev
-  run:
-    - typing_extensions
-    - python
-    - packaging >20.9
-    - numpy >=2
-    - scipy
-    - scikit-learn
-    - pandas
-    - tqdm >=4.27.0
-    - slicer ==0.0.8
-    - numba >=0.54
-    - if: osx and x86_64
-      then:
-        - llvmlite <0.46
-    - cloudpickle
-    - if: cuda_compiler_version != "None"
-      then: __cuda
-
-tests:
-  - python:
-      imports:
-        - shap
-        - shap._cext
-        - if: cuda_compiler_version != "None"
-          then: shap._cext_gpu
-  - files:
-      source:
-        - tests
+outputs:
+  - package:
+      name: shap
+    build:
+      # Without this key conda-smithy merges all CUDA variants into one
+      # Windows CI job, whose CONDA_OVERRIDE_CUDA fits only the first one.
+      variant:
+        use_keys:
+          - cuda_compiler_version
+      script:
+        - if: win
+          then:
+            - set CMAKE_GENERATOR=Ninja
+            - set CMAKE_GENERATOR_PLATFORM=
+            - set CMAKE_GENERATOR_TOOLSET=
+        - ${{ PYTHON }} -m pip install . --no-deps --ignore-installed --no-cache-dir -vvv
     requirements:
-      run:
+      build:
+        - ${{ compiler('c') }}
+        - ${{ stdlib("c") }}
+        - ${{ compiler('cxx') }}
+        - cmake
+        - ninja
+        - if: unix
+          then: make
+        - if: build_platform != target_platform
+          then:
+            - python
+            - cross-python_${{ target_platform }}
+            - numpy
+      host:
+        - python
         - pip
-        - pytest
-        - pytest-mpl
-        - matplotlib-base
-        - ipython
-        - xgboost
-        - if: osx or linux64
-          then: pytorch
-        - if: not (win or ppc64le or aarch64) and not match(python, "=3.14") # excluding python 3.14 due to missing tokenizers package required by transformers <4.54.0
-          then: transformers <4.54.0 # taken from https://github.com/shap/shap/pull/4176
-        - if: not ppc64le and not (win and match(python, "=3.14"))
-          then: catboost >=1.2.7
-        - if: not match(python, ">=3.13")
-          then: ngboost
-        - pyod >=1
-        - lightgbm
-        - sentencepiece
-    script:
-      - pip check
-      # https://github.com/shap/shap/issues/4179
-      - if: cuda_compiler_version == "None" and build_platform != "osx-64"
-        then: pytest -k "not xslow" -sv tests
+        - setuptools
+        - scikit-build-core >=0.10.0
+        - setuptools-scm >=8.0
+        - numpy
+        - packaging >20.9
+        - nanobind >=2.0.0
+      run:
+        - python
+        - packaging >20.9
+        - numpy >=2
+        - scipy
+        - scikit-learn
+        - pandas
+        - tqdm >=4.27.0
+        - slicer ==0.0.8
+        - if: osx and x86_64
+          then:
+            - llvmlite <0.46
+        - cloudpickle
+    tests:
+      - python:
+          imports:
+            - shap
+            - shap._cext
+      - files:
+          source:
+            - tests
+        requirements:
+          run:
+            - pip
+            - pytest
+            - pytest-mpl
+            - matplotlib-base
+            - ipython
+            - xgboost
+            - if: osx or linux64
+              then: pytorch
+            - if: not (win or ppc64le or aarch64) and not match(python, "=3.14") # excluding python 3.14 due to missing tokenizers package required by transformers <4.54.0
+              then: transformers <4.54.0 # taken from https://github.com/shap/shap/pull/4176
+            - if: not ppc64le and not (win and match(python, "=3.14"))
+              then: catboost >=1.2.7
+            - if: not match(python, ">=3.13")
+              then: ngboost
+            - pyod >=1
+            - lightgbm
+            - sentencepiece
+        script:
+          - pip check
+          # https://github.com/shap/shap/issues/4179
+          - if: build_platform != "osx-64"
+            then: pytest -k "not xslow" -sv tests
+
+  - package:
+      name: shap-cuda
+    build:
+      skip:
+        - cuda_compiler_version is undefined or cuda_compiler_version == "None"
+      script:
+        env:
+          SETUPTOOLS_SCM_PRETEND_VERSION_FOR_SHAP_CUDA: ${{ version }}
+          CMAKE_ARGS: -DCMAKE_CUDA_ARCHITECTURES=75;80;86;89;90;100;120
+        content:
+          - if: win
+            then:
+              - set CMAKE_GENERATOR=Ninja
+              - set CMAKE_GENERATOR_PLATFORM=
+              - set CMAKE_GENERATOR_TOOLSET=
+              # tree_shap.h is a symlink into shap/cext, which does not survive
+              # sdist extraction on Windows.
+              - set "CXXFLAGS=%CXXFLAGS% /I%SRC_DIR%\shap\cext"
+              - set "CUDAFLAGS=%CUDAFLAGS% -I%SRC_DIR%\shap\cext"
+              # CCCL 3 (CUDA 13) rejects MSVC's traditional preprocessor.
+              - if: cuda_compiler_version is defined and cuda_compiler_version is startingwith("13")
+                then: set "CUDAFLAGS=%CUDAFLAGS% -Xcompiler=/Zc:preprocessor"
+          - ${{ PYTHON }} -m pip install backends/shap-cuda --no-deps --ignore-installed --no-cache-dir -vvv
+    requirements:
+      build:
+        - ${{ compiler('c') }}
+        - ${{ stdlib("c") }}
+        - ${{ compiler('cxx') }}
+        - ${{ compiler('cuda') }}
+        - cmake >=3.24
+        - ninja
+        - make
+        - if: build_platform != target_platform
+          then:
+            - python
+            - cross-python_${{ target_platform }}
+            - numpy
+      host:
+        - python
+        - pip
+        - scikit-build-core >=0.10.0
+        - setuptools-scm >=8.0
+        - numpy
+        - packaging >20.9
+        - if: cuda_compiler_version is defined and cuda_compiler_version != "None"
+          then: cuda-version ==${{ cuda_compiler_version }}
+        - cuda-cudart-dev
+      run:
+        - python
+        - ${{ pin_subpackage('shap', exact=True) }}
+        - numpy >=2,<2.5
+        - packaging >20.9
+        - __cuda
+    tests:
+      - python:
+          imports:
+            - shap_cuda
+            - shap_cuda._cext_gpu
+      - files:
+          source:
+            - tests
+        requirements:
+          run:
+            - pip
+            - pytest
+            - pytest-mpl
+            - matplotlib-base
+            - ipython
+            - xgboost
+            - if: osx or linux64
+              then: pytorch
+            - if: not (win or ppc64le or aarch64) and not match(python, "=3.14") # excluding python 3.14 due to missing tokenizers package required by transformers <4.54.0
+              then: transformers <4.54.0 # taken from https://github.com/shap/shap/pull/4176
+            - if: not ppc64le and not (win and match(python, "=3.14"))
+              then: catboost >=1.2.7
+            - if: not match(python, ">=3.13")
+              then: ngboost
+            - pyod >=1
+            - lightgbm
+            - sentencepiece
+        script:
+          - pip check
+          - python -c "import shap, shap_cuda; assert shap.GPUTreeExplainer is shap_cuda.GPUTreeExplainer"
+          # https://github.com/shap/shap/issues/4179
+          - if: build_platform != "osx-64"
+            then: pytest -k "not xslow" -sv tests
 
 about:
   license: MIT
@@ -119,6 +201,7 @@ about:
   summary: A unified approach to explain the output of any machine learning model.
   description: |
     SHAP (SHapley Additive exPlanations) is a unified approach to explain the output of any machine learning model. SHAP connects game theory with local explanations, uniting several previous methods and representing the only possible consistent and locally accurate additive feature attribution method based on expectations.
+    The shap-cuda output provides the CUDA-accelerated GPUTreeExplainer backend, installed by shap[cuda].
   homepage: https://github.com/slundberg/shap
   repository: https://github.com/slundberg/shap
   documentation: https://shap.readthedocs.io/en/latest/
